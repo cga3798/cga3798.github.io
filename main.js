@@ -63,7 +63,7 @@ Animation.prototype.isDone = function () {
  * setup to repeat infinitely.
  */
 function Background(game, spritesheet) {
-    this.x = 0;
+    this.x = -1000;
     this.y = 0;
     this.speed = -150
     this.spritesheet = spritesheet;
@@ -93,7 +93,7 @@ Background.prototype.draw = function () {
  * setup to repeat infinitely.
  */
 function BackgroundTwo(game, spritesheet) {
-    this.x = 2078;
+    this.x = 1078;
     this.y = 0;
     this.speed = -150;
     this.spritesheet = spritesheet;
@@ -364,7 +364,7 @@ Hero.prototype.update = function () {
         this.y = this.ground - height;
 
         if (this.standForward) this.x += (this.game.clockTick * this.speed) / 2;
-        else this.x -= (this.game.clockTick * this.speed) / 2;
+        else if(this.x >= 40) this.x -= (this.game.clockTick * this.speed) / 2;
     }
     else if (this.jumping) {
         if (this.frontJump.isDone() || this.backJump.isDone()) {
@@ -390,15 +390,14 @@ Hero.prototype.update = function () {
 
     else if (this.runFlag && this.standForward && !this.crawlForward) {
         this.x += this.game.clockTick * this.speed;
-        if (this.x > 3200) this.x = -230;
     }
 
     else if ((this.runFlag && !this.standForward && !this.crawlForward)) {
 
-        this.x -= this.game.clockTick * this.speed;
-        if (this.x < -230) this.x = 3200;
+        if(this.x >= 40) this.x -= this.game.clockTick * this.speed;
     }
     that = this;
+
     if (this.firing) {
     
         if (this.CanShoot) {
@@ -489,12 +488,13 @@ function EnemySoldier(game, spritesheet1, spritesheet2, spritesheet3, spriteshee
 EnemySoldier.prototype = new Entity();
 EnemySoldier.prototype.constructor = Robot;
 EnemySoldier.prototype.update = function () {
-    enemyThat = this;
-    if ((Math.abs(this.x - this.game.entities[2].x) >= 200 )) this.standing = false;
-    if (Math.abs(this.x - this.game.entities[2].x) <= 200 ) {
+    var enemyThat = this;
+    if ((Math.abs(this.x - this.game.entities[3].x) >= 200 )) this.standing = false;
+    if (Math.abs(this.x - this.game.entities[3].x) <= 200 ) {
         this.standing = true;
-        if(this.x - this.game.entities[2].x < 0) this.forward = true;
+        if(this.x - this.game.entities[3].x < 0) this.forward = true;
         else this.forward = false;
+      
         if (this.enemyShoot) {
             if (this.forward) this.game.addEntity(new Bullet(this.game, this.x + 100, this.y + 35, this.forward));
             else this.game.addEntity(new Bullet(this.game, this.x, this.y + 35, this.forward));
@@ -526,11 +526,11 @@ EnemySoldier.prototype.update = function () {
 
 EnemySoldier.prototype.draw = function () {
     if (this.forward) {
-        if (this.standing) this.enemyFrontStand.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
+        if (this.standing) this.enemyFrontStand.drawFrame(this.game.clockTick, this.ctx, this.x - cameraX, this.y);
         else this.enemyFrontRun.drawFrame(this.game.clockTick, this.ctx, this.x - cameraX, this.y);
     }
     else {
-        if (this.standing) this.enemyBackStand.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
+        if (this.standing) this.enemyBackStand.drawFrame(this.game.clockTick, this.ctx, this.x - cameraX, this.y);
         else this.enemyBackRun.drawFrame(this.game.clockTick, this.ctx, this.x - cameraX, this.y);
     }
     Entity.prototype.draw.call(this);
