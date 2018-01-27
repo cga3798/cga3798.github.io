@@ -63,15 +63,21 @@ Animation.prototype.isDone = function () {
  * setup to repeat infinitely.
  */
 function Background(game, spritesheet) {
-    this.x = -1000;
+    this.x = -100;
     this.y = 0;
-    this.speed = -150
+    this.speed = -50;
     this.spritesheet = spritesheet;
     this.game = game;
     this.ctx = game.ctx;
 };
 
+var xPosDelta = -100;
+
 Background.prototype.update = function () {
+	console.log(this.game.entities[3].x);
+	
+	if (!(xPosDelta == this.game.entities[3].x || this.game.entities[3].x > 3300)){
+		console.log("It works!");
 
     if (this.game.d) {
         this.x += this.game.clockTick * this.speed * 0.75;
@@ -80,11 +86,15 @@ Background.prototype.update = function () {
         this.x -= this.game.clockTick * this.speed * 0.75;
     }
     if (this.x < -2083) this.x = Background2 + 2075;
+	
+	xPosDelta = this.game.entities[3].x;
+	}
+	
 };
 
 Background.prototype.draw = function () {
     this.ctx.drawImage(this.spritesheet, this.x, this.y);
-    Background1 = this.x;
+ 
 };
 
 
@@ -93,9 +103,9 @@ Background.prototype.draw = function () {
  * setup to repeat infinitely.
  */
 function BackgroundTwo(game, spritesheet) {
-    this.x = 1078;
+    this.x = 1982;
     this.y = 0;
-    this.speed = -150;
+    this.speed = -50;
     this.spritesheet = spritesheet;
     this.game = game;
     this.ctx = game.ctx;
@@ -105,8 +115,7 @@ BackgroundTwo.prototype.update = function () {
 
     var mod = 0.75;
 
-
-
+	if (!(xPosDelta == this.game.entities[3].x || this.game.entities[3].x > 3300)){
     if (this.game.d) {
         this.x += this.game.clockTick * this.speed * mod;
     }
@@ -114,6 +123,7 @@ BackgroundTwo.prototype.update = function () {
         this.x -= this.game.clockTick * this.speed * mod;
     }
     if (this.x < -2083) this.x = Background1 + 2075;
+	}
 };
 
 BackgroundTwo.prototype.draw = function () {
@@ -161,7 +171,7 @@ var map = {
 function Platform(game) {
     this.x = 0;
     this.y = 0;
-    this.speed = -300
+    //this.speed = -300
     this.game = game;
     this.ctx = game.ctx;
 };
@@ -656,7 +666,7 @@ BulletFlash.prototype.draw = function () {
 
 }
 
-AM.queueDownload("./img/bulletFlash.jpg");
+//AM.queueDownload("./img/bulletFlash.jpg");
 AM.queueDownload("./img/backgroundtrees.jpg");
 AM.queueDownload("./img/backgroundtrees1.jpg");
 AM.queueDownload("./img/backCrawl.png");
@@ -699,13 +709,13 @@ AM.downloadAll(function () {
     gameEngine.start();
 
     gameEngine.addEntity(new Background(gameEngine, AM.getAsset("./img/backgroundtrees.jpg")));
-    gameEngine.addEntity(new BackgroundTwo(gameEngine, AM.getAsset("./img/backgroundtrees1.jpg")));
+    gameEngine.addEntity(new BackgroundTwo(gameEngine, AM.getAsset("./img/backgroundtrees.jpg")));
     gameEngine.addEntity(new Platform(gameEngine));
     gameEngine.addEntity(new Hero(gameEngine, AM.getAsset("./img/runningHero.png"), AM.getAsset("./img/backwardHero.png"), AM.getAsset("./img/frontStanding.png")
         , AM.getAsset("./img/backwardStand.png"), AM.getAsset("./img/frontJump.png"), AM.getAsset("./img/backJump.png")
         , AM.getAsset("./img/bullet.png"), AM.getAsset("./img/backCrawl.png"), AM.getAsset("./img/frontCrawl.png")
         , AM.getAsset("./img/backCrawl.png")));
-    gameEngine.addEntity(new Camera(gameEngine));
+	gameEngine.addEntity(new Camera(gameEngine));
     gameEngine.addEntity(new Robot(gameEngine, AM.getAsset("./img/red_Robot.png"), AM.getAsset("./img/red_Robot.png"), 300, 575, 60));
     gameEngine.addEntity(new Robot(gameEngine, AM.getAsset("./img/blue_Robot.png"), AM.getAsset("./img/blue_Robot.png"), 1200, 575, 60));
     gameEngine.addEntity(new Robot(gameEngine, AM.getAsset("./img/orange_Robot.png"), AM.getAsset("./img/orange_Robot.png"), 1800, 575, 60));
