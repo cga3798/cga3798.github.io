@@ -74,6 +74,69 @@ Background.prototype.draw = function () {
 
 Background.prototype.update = function () {
 };
+function collide(thisUnit, otherUnit) {
+    var rect1 = {x: thisUnit.x, y: thisUnit.y, width: thisUnit.width, height: thisUnit.height}
+    var rect2 = {x: otherUnit.x, y: otherUnit.y, width: otherUnit.width, height: otherUnit.height}
+    if (otherUnit.unitType === "giantRobot") {
+        rect2.width = 100;
+        rect2.x = otherUnit.x + 80;
+    }
+    if (otherUnit.standingStance === 0) {
+        rect2.height = 10;
+        rect2.y = otherUnit.y + 75;
+    }
+    if (otherUnit.crouch) {
+        rect2.height = 30;
+        rect2.y = otherUnit.y + 60;
+    }
+    if (rect1.x < (rect2.x + rect2.width)
+    && (rect1.x + rect1.width) > rect2.x
+    && rect1.y < (rect2.y + rect2.height)
+    && (rect1.height + rect1.y) > rect2.y) {
+        if (otherUnit.isBullet) {
+        }
+        else if (!otherUnit.isBullet){
+            if (thisUnit.isBullet) {
+                if (otherUnit.enemy && !(thisUnit.unitType === "hero")) {
+                    if (otherUnit.unitType === "blueRobot") thisUnit.removeFromWorld = true;
+
+                }
+                else {
+                    if (otherUnit.unitType !== "blueRobot") {
+                        if (!otherUnit.immune) otherUnit.health -= 1;
+                    }
+                    if (otherUnit.hero && !otherUnit.immune) {
+                        otherUnit.hurt = true;
+                    }
+                    thisUnit.removeFromWorld = true;
+                }
+            }
+            if (thisUnit.hero) {
+                if (otherUnit.landMine && !thisUnit.immune) {
+                    thisUnit.health -= 4;
+                    thisUnit.hurt = true;
+                    otherUnit.health = 0;
+                }
+                else if (otherUnit.enemy && !thisUnit.immune){
+                    thisUnit.hurt = true;
+                    thisUnit.health -= 1;
+                }
+                if (thisUnit.x < otherUnit.x) thisUnit.collideForward = true;
+                else thisUnit.collideForward = false;
+            }
+            else if (thisUnit.enemy) {
+                if (otherUnit.hero) {
+                    if (otherUnit.x < thisUnit.x) otherUnit.collideForward = true;
+                    else otherUnit.collideForward = false;
+                }
+                else if (otherUnit.landMine) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+};
 
 // inheritance
 function Hero(game, spritesheet, spritesheet2, spriteSheet3, spriteSheet4, spriteSheet5, spriteSheet6, spriteSheet7, spriteSheet8, spriteSheet9, spriteSheet10
