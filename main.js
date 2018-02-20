@@ -745,7 +745,7 @@ AM.downloadAll(function () {
     gameEngine.addEntity(new EnemySoldier(gameEngine, AM.getAsset("./img/enemySoldier_Backward.png")
         , AM.getAsset("./img/enemySoldier_Foward.png"), AM.getAsset("./img/enemySoldier_StandingBackward.png")
         , AM.getAsset("./img/enemySoldier_StandingFoward.png"),AM.getAsset("./img/enemySoldier_CrouchFoward.png")
-        , AM.getAsset("./img/enemySoldier_CrouchBackward.png"), 700, 524, 200, 3, 1000));
+        , AM.getAsset("./img/enemySoldier_CrouchBackward.png"), 600, 524, 200, 3, 1000));
 
     gameEngine.addEntity(new FlyingRobot(gameEngine, AM.getAsset("./img/flyingRobot_Backward.png")
         , AM.getAsset("./img/flyingRobot_Forward.png"), 400, 100, 60, 2, 500));
