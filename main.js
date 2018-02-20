@@ -380,27 +380,9 @@ EnemySoldier.prototype.update = function () {
     this.isCollide = false;
     this.collideForward = false;
     if (this.health <= 0) this.isDead = true;
-    if (this.isDead) {
-		this.game.entities[2].scores += this.scores;				 // Thu added
-		this.game.scores.innerHTML = "Scores: " + this.game.entities[2].scores;
+    if (this.isDead) {		
         gameEngine.removeEntity(this);
-        ///////////////////////////////////////////
-        ///// Buff Drops everytime right now //////
-        ///////////////////////////////////////////
-        //Change the '* 1' inside the Math.random//
-        /// to '* 10' to make it a 1/10th chance //
-        ///////////////////////////////////////////
-        var powerUpChance = Math.floor(Math.random() * 6) +1 ; //Generates a random number between 1-10
-        if (powerUpChance === 1) {
-            gameEngine.addPowerUp(new FirePowerUp(gameEngine,
-                AM.getAsset("./img/firepowerup.png"), this.x, this.y - 50));
-        } else if (powerUpChance === 2) {
-            gameEngine.addPowerUp(new HeartPowerUp(gameEngine,
-                AM.getAsset("./img/heart.png"), this.x, this.y -50));
-        } else if (powerUpChance === 3) {
-            gameEngine.addPowerUp(new RapidFirePowerUp(gameEngine,
-                AM.getAsset("./img/gattling.png"), this.x, this.y -50));
-        }
+
     }
     for (var i = 0; i < this.game.entities.length; i++) {
         var ent = this.game.entities[i];
@@ -578,27 +560,7 @@ FlyingRobot.prototype.update = function () {
         this.isDead = true;
     }
     if (this.isDead) {
-		this.game.entities[2].scores += this.scores
-		this.game.scores.innerHTML = "Scores: " + this.game.entities[2].scores;
         this.removeFromWorld = true;
-
-        ///////////////////////////////////////////
-        ///// Buff Drops everytime right now //////
-        ///////////////////////////////////////////
-        //Change the '* 1' inside the Math.random//
-        /// to '* 10' to make it a 1/10th chance //
-        ///////////////////////////////////////////
-        var powerUpChance = Math.floor(Math.random() * 6) +1 ; //Generates a random number between 1-10
-            if (powerUpChance === 1) {
-                gameEngine.addPowerUp(new FirePowerUp(gameEngine,
-                    AM.getAsset("./img/firepowerup.png"), this.x, this.y -15 ));
-            } else if (powerUpChance === 2) {
-                gameEngine.addPowerUp(new HeartPowerUp(gameEngine,
-                    AM.getAsset("./img/heart.png"), this.x, this.y -15 ));
-            } else if (powerUpChance === 3) {
-                gameEngine.addPowerUp(new RapidFirePowerUp(gameEngine,
-                    AM.getAsset("./img/gattling.png"), this.x, this.y -50));
-            }
     }
     if ((Math.abs(this.game.entities[2].x - this.center) < 130)) this.heroInRange = true;
     else this.heroInRange = false;
