@@ -1,3 +1,5 @@
+// This game shell was happily copied from Googler Seth Ladd's "Bad Aliens" game and his Google IO talk in 2011
+
 window.requestAnimFrame = (function () {
     return window.requestAnimationFrame ||
             window.webkitRequestAnimationFrame ||
@@ -8,6 +10,7 @@ window.requestAnimFrame = (function () {
                 window.setTimeout(callback, 1000 / 60);
             };
 })();
+
 
 function Timer() {
     this.gameTime = 0;
@@ -28,6 +31,7 @@ Timer.prototype.tick = function () {
 function GameEngine() {
     this.entities = [];
     this.showOutlines = false;
+    this.newEmement = 0;
     this.ctx = null;
     this.click = null;
     this.mouse = null;
@@ -57,58 +61,51 @@ GameEngine.prototype.start = function () {
 GameEngine.prototype.startInput = function () {
     console.log('Starting input');
     var that = this;
+
+    var getXandY = function (e) {
+        var x = e.clientX - that.ctx.canvas.getBoundingClientRect().left;
+        var y = e.clientY - that.ctx.canvas.getBoundingClientRect().top;
+
+        return { x: x, y: y };
+    }
+
     this.ctx.canvas.addEventListener("keydown", function (e) {
-        
-        if (e.code === "KeyD") {
-            that.d = true;
-
-        }
-        else if (e.code === "KeyA") {
-            that.a = true;
-
-        }
-        else if (String.fromCharCode(e.which) === ' ') that.space = true;
-        
-        else if (e.code === "KeyS") {
+        console.log("hello");
+        if (e.code === "KeyS") {
             that.s = true;
+
         }
-        else if (e.code === "ArrowRight") {
-            that.shooting = true;
+        else if (e.code === "KeyL") {
+            that.l = true;
+
         }
+		
         e.preventDefault();
         console.log("Key down Event - Char " + e.code + " Code " + e.keyCode);
     }, false);
+
     this.ctx.canvas.addEventListener("keyup", function (e) {
-        
-        if (e.code === "KeyD") {
-            that.d = false;
+
+        if (e.code === "KeyS") {
+            that.s = false;
 
         }
-        else if (e.code === "KeyA") {
-            that.a = false;
+        else if (e.code === "KeyL") {
+            that.l = false;
+
+        }
         
-        }
-        else if (e.code === "KeyS") {
-            that.s = false;
-        }
-        else if (e.code === "ArrowRight") {
-            that.shooting = false;
-        }
-        console.log("Key Up Event - Char " + e.code + " Code " + e.keyCode);
+        //console.log("Key Up Event - Char " + e.code + " Code " + e.keyCode);
     }, false);
+    console.log("goodbye");
 }
 
 GameEngine.prototype.addEntity = function (entity) {
-    console.log('added entity');
     this.entities.push(entity);
-}
-GameEngine.prototype.getEntity = function () {
-    console.log('got entity');
-    return this.entities;
 }
 
 GameEngine.prototype.draw = function () {
-    this.ctx.clearRect(0, 0, this.surfaceWidth, this.surfaceHeight);
+    this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
     this.ctx.save();
     for (var i = 0; i < this.entities.length; i++) {
         this.entities[i].draw(this.ctx);
@@ -136,9 +133,18 @@ GameEngine.prototype.update = function () {
 
 GameEngine.prototype.loop = function () {
     this.clockTick = this.timer.tick();
+    this.newEmement += this.clockTick;
+    if (this.newEmement >= 10) {
+        this.addNewElement = true
+        this.newEmement = 0;
+    }
     this.update();
     this.draw();
-    this.space = null;
+    this.click = null;
+    this.rightclick = null;
+    this.wheel = null;
+    this.s = null;
+    this.l = null;
 }
 
 function Entity(game, x, y) {
